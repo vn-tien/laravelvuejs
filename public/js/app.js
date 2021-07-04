@@ -1861,9 +1861,70 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   mounted: function mounted() {
     console.log('Component mounted.');
+  },
+  data: function data() {
+    return {
+      topTenFrameworks: [{
+        name: "ASP.NET",
+        github: null,
+        stackoverflow: 100,
+        overall: 100
+      }, {
+        name: "AngularJS",
+        github: 96,
+        stackoverflow: 97,
+        overall: 96
+      }, {
+        name: "Ruby on Rails",
+        github: 92,
+        stackoverflow: 98,
+        overall: 95
+      }, {
+        name: "ASP NET",
+        github: null,
+        stackoverflow: 94,
+        overall: 94
+      }, {
+        name: "React",
+        github: 100,
+        stackoverflow: 87,
+        overall: 93
+      }, {
+        name: "Django",
+        github: 89,
+        stackoverflow: 94,
+        overall: 91
+      }, {
+        name: "Angular",
+        github: 90,
+        stackoverflow: 89,
+        overall: 89
+      }, {
+        name: "Laravel",
+        github: 91,
+        stackoverflow: 88,
+        overall: 89
+      }, {
+        name: "Spring",
+        github: 84,
+        stackoverflow: 92,
+        overall: 88
+      }, {
+        name: "Express",
+        github: 91,
+        stackoverflow: 83,
+        overall: 87
+      }]
+    };
   }
 });
 
@@ -1901,10 +1962,7 @@ Vue.component('example-component', __webpack_require__(/*! ./components/ExampleC
  */
 
 var app = new Vue({
-  el: '#app',
-  data: {
-    message: 'Hello'
-  }
+  el: '#app'
 });
 
 /***/ }),
@@ -37424,29 +37482,44 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c("div", { staticClass: "container py-5 mt-2" }, [
+    _c("h2", [_vm._v("Top 10 Frameworks")]),
+    _vm._v(" "),
+    _c(
+      "table",
+      { staticClass: "table table-bordered" },
+      [
+        _vm._m(0),
+        _vm._v(" "),
+        _vm._l(_vm.topTenFrameworks, function(framework) {
+          return _c("tr", [
+            _c("td", [_vm._v(_vm._s(framework.name))]),
+            _vm._v(" "),
+            _c("td", [_vm._v(_vm._s(framework.github))]),
+            _vm._v(" "),
+            _c("td", [_vm._v(_vm._s(framework.stackoverflow))]),
+            _vm._v(" "),
+            _c("td", [_vm._v(_vm._s(framework.overall))])
+          ])
+        })
+      ],
+      2
+    )
+  ])
 }
 var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "container" }, [
-      _c("div", { staticClass: "row justify-content-center" }, [
-        _c("div", { staticClass: "col-md-8" }, [
-          _c("div", { staticClass: "card" }, [
-            _c("div", { staticClass: "card-header" }, [
-              _vm._v("Example Component")
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "card-body" }, [
-              _vm._v(
-                "\n                    I'm an example component.\n                "
-              )
-            ])
-          ])
-        ])
-      ])
+    return _c("tr", [
+      _c("th", [_vm._v("Framework")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Github Score")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Stack Overflow Score")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Overall Score")])
     ])
   }
 ]
