@@ -1875,7 +1875,7 @@ __webpack_require__.r(__webpack_exports__);
     return {
       topTenFrameworks: [{
         name: "ASP.NET",
-        github: null,
+        github: 39,
         stackoverflow: 100,
         overall: 100
       }, {
@@ -1890,7 +1890,7 @@ __webpack_require__.r(__webpack_exports__);
         overall: 95
       }, {
         name: "ASP NET",
-        github: null,
+        github: 38,
         stackoverflow: 94,
         overall: 94
       }, {
