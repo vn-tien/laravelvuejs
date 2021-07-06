@@ -1867,64 +1867,201 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   mounted: function mounted() {
-    console.log('Component mounted.');
+    this.title = "Mr.", console.log('Component mounted.');
   },
   data: function data() {
     return {
       topTenFrameworks: [{
-        name: "ASP.NET",
-        github: 39,
-        stackoverflow: 100,
-        overall: 100
-      }, {
-        name: "AngularJS",
-        github: 96,
-        stackoverflow: 97,
-        overall: 96
-      }, {
-        name: "Ruby on Rails",
-        github: 92,
-        stackoverflow: 98,
-        overall: 95
+        name: "Spring",
+        score: 88
       }, {
         name: "ASP NET",
-        github: 38,
-        stackoverflow: 94,
-        overall: 94
+        score: 100
       }, {
-        name: "React",
-        github: 100,
-        stackoverflow: 87,
-        overall: 93
-      }, {
-        name: "Django",
-        github: 89,
-        stackoverflow: 94,
-        overall: 91
-      }, {
-        name: "Angular",
-        github: 90,
-        stackoverflow: 89,
-        overall: 89
-      }, {
-        name: "Laravel",
-        github: 91,
-        stackoverflow: 88,
-        overall: 89
-      }, {
-        name: "Spring",
-        github: 84,
-        stackoverflow: 92,
-        overall: 88
+        name: "Ruby on Rails",
+        score: 95
       }, {
         name: "Express",
-        github: 91,
-        stackoverflow: 83,
-        overall: 87
-      }]
+        score: 87
+      }, {
+        name: "AngularJS",
+        score: 96
+      }, {
+        name: "Django",
+        score: 91
+      }, {
+        name: "Angular",
+        score: 89
+      }, {
+        name: "Laravel",
+        score: 89
+      }, {
+        name: "React",
+        score: 93
+      }, {
+        name: "Vue.js",
+        score: 89
+      }],
+      name: 'John Doe',
+      email: 'johndoe@test.com',
+      order: 1,
+      showAlertPrimary: true,
+      showAlertSecondary: true,
+      favoriteFrameworks: [{
+        name: "Angular",
+        votes: 0
+      }, {
+        name: "React.js",
+        votes: 3
+      }, {
+        name: "Vue.js",
+        votes: 7
+      }],
+      framework: '',
+      style1: {
+        backgroundColor: 'white'
+      },
+      style2: {
+        color: 'black'
+      },
+      style3: {
+        border: '2px dashed red'
+      },
+      style4: {
+        textTransform: 'lowercase'
+      },
+      alertType: 'alert-primary'
     };
+  },
+  computed: {
+    lowerName: function lowerName() {
+      console.log('computed lowerName ()');
+      return (this.usingMyConstant() + " " + this.name).toLowerCase();
+    },
+    topTenFrameworksSorted: function topTenFrameworksSorted() {
+      var _this = this;
+
+      return this.topTenFrameworks.sort(function (a, b) {
+        return (a.score - b.score) * _this.order;
+      });
+    },
+    sortType: function sortType() {
+      return this.order === 1 ? 'ascending' : 'descending';
+    }
+  },
+  methods: {
+    usingMyConstant: function usingMyConstant() {
+      return this.title;
+    },
+    upperName: function upperName() {
+      console.log('upperName ()');
+      return (this.usingMyConstant() + " " + this.name).toUpperCase();
+    },
+    toggle: function toggle() {
+      return this.order *= -1;
+    },
+    upvote: function upvote(framework) {
+      framework.votes++;
+    },
+    handleSubmit: function handleSubmit() {
+      if (this.framework.trim()) {
+        this.favoriteFrameworks.push({
+          name: this.framework,
+          votes: 8
+        });
+        this.framework = '';
+      }
+    },
+    clearText: function clearText() {
+      this.framework = '';
+    }
   }
 });
 
@@ -37483,46 +37620,469 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "container py-5 mt-2" }, [
-    _c("h2", [_vm._v("Top 10 Frameworks")]),
+    _vm.showAlertPrimary
+      ? _c("div", { staticClass: "alert alert-primary" }, [
+          _vm._v("\n        v-if Alert\n    ")
+        ])
+      : _vm._e(),
     _vm._v(" "),
     _c(
-      "table",
-      { staticClass: "table table-bordered" },
-      [
-        _vm._m(0),
+      "div",
+      {
+        directives: [
+          {
+            name: "show",
+            rawName: "v-show",
+            value: _vm.showAlertSecondary,
+            expression: "showAlertSecondary"
+          }
+        ],
+        staticClass: "alert alert-secondary"
+      },
+      [_vm._v("\n        v-show Alert\n    ")]
+    ),
+    _vm._v(" "),
+    _c("div", [
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-primary",
+          on: {
+            click: function($event) {
+              _vm.showAlertPrimary = !_vm.showAlertPrimary
+            }
+          }
+        },
+        [_vm._v("Toggle Message (v-if)")]
+      ),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-secondary",
+          on: {
+            click: function($event) {
+              _vm.showAlertSecondary = !_vm.showAlertSecondary
+            }
+          }
+        },
+        [_vm._v("Toggle Message (v-show)")]
+      )
+    ]),
+    _vm._v(" "),
+    _c("h1", [_vm._v("Vote Your Favorite Frameworks")]),
+    _vm._v(" "),
+    _c(
+      "ul",
+      { staticClass: "list-group mb-3" },
+      _vm._l(_vm.favoriteFrameworks, function(framework) {
+        return _c(
+          "li",
+          {
+            staticClass:
+              "list-group-item d-flex justify-content-between align-items-center"
+          },
+          [
+            _vm._v(
+              "\n            " + _vm._s(framework.name) + "\n            "
+            ),
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-outline-primary",
+                on: {
+                  click: function($event) {
+                    return _vm.upvote(framework)
+                  }
+                }
+              },
+              [
+                _vm._v("\n                Upvote\n                "),
+                _c("span", { staticClass: "badge badge-primary badge-pill" }, [
+                  _vm._v(_vm._s(framework.votes))
+                ])
+              ]
+            )
+          ]
+        )
+      }),
+      0
+    ),
+    _vm._v(" "),
+    _c("div", { staticClass: "form-group" }, [
+      _c("input", {
+        directives: [
+          {
+            name: "model",
+            rawName: "v-model",
+            value: _vm.framework,
+            expression: "framework"
+          }
+        ],
+        staticClass: "form-control",
+        attrs: {
+          type: "text",
+          placeholder: "Enter Your another favorite Framework"
+        },
+        domProps: { value: _vm.framework },
+        on: {
+          keyup: [
+            function($event) {
+              if (
+                !$event.type.indexOf("key") &&
+                _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
+              ) {
+                return null
+              }
+              return _vm.handleSubmit.apply(null, arguments)
+            },
+            function($event) {
+              if (
+                !$event.type.indexOf("key") &&
+                _vm._k($event.keyCode, "esc", 27, $event.key, ["Esc", "Escape"])
+              ) {
+                return null
+              }
+              return _vm.clearText.apply(null, arguments)
+            }
+          ],
+          input: function($event) {
+            if ($event.target.composing) {
+              return
+            }
+            _vm.framework = $event.target.value
+          }
+        }
+      })
+    ]),
+    _vm._v(" "),
+    _c(
+      "h1",
+      {
+        staticClass: "display-1 p-5",
+        style: [_vm.style1, _vm.style2, _vm.style3, _vm.style4]
+      },
+      [_vm._v("Style me")]
+    ),
+    _vm._v(" "),
+    _c("div", { staticClass: "form-row" }, [
+      _c("div", { staticClass: "form-group col-md-2" }, [
+        _c("label", [_vm._v("Background")]),
         _vm._v(" "),
-        _vm._l(_vm.topTenFrameworks, function(framework) {
+        _c(
+          "select",
+          {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.style1.backgroundColor,
+                expression: "style1.backgroundColor"
+              }
+            ],
+            staticClass: "form-control",
+            on: {
+              change: function($event) {
+                var $$selectedVal = Array.prototype.filter
+                  .call($event.target.options, function(o) {
+                    return o.selected
+                  })
+                  .map(function(o) {
+                    var val = "_value" in o ? o._value : o.value
+                    return val
+                  })
+                _vm.$set(
+                  _vm.style1,
+                  "backgroundColor",
+                  $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+                )
+              }
+            }
+          },
+          [
+            _c("option", [_vm._v("Background")]),
+            _vm._v(" "),
+            _c("option", { attrs: { value: "white" } }, [_vm._v("White")]),
+            _vm._v(" "),
+            _c("option", { attrs: { value: "red" } }, [_vm._v("Red")]),
+            _vm._v(" "),
+            _c("option", { attrs: { value: "green" } }, [_vm._v("Green")]),
+            _vm._v(" "),
+            _c("option", { attrs: { value: "blue" } }, [_vm._v("Blue")])
+          ]
+        )
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "form-group col-md-2" }, [
+        _c("label", [_vm._v("Text Color")]),
+        _vm._v(" "),
+        _c(
+          "select",
+          {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.style2.color,
+                expression: "style2.color"
+              }
+            ],
+            staticClass: "form-control",
+            on: {
+              change: function($event) {
+                var $$selectedVal = Array.prototype.filter
+                  .call($event.target.options, function(o) {
+                    return o.selected
+                  })
+                  .map(function(o) {
+                    var val = "_value" in o ? o._value : o.value
+                    return val
+                  })
+                _vm.$set(
+                  _vm.style2,
+                  "color",
+                  $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+                )
+              }
+            }
+          },
+          [
+            _c("option", [_vm._v("Color")]),
+            _vm._v(" "),
+            _c("option", { attrs: { value: "black" } }, [_vm._v("Black")]),
+            _vm._v(" "),
+            _c("option", { attrs: { value: "white" } }, [_vm._v("White")]),
+            _vm._v(" "),
+            _c("option", { attrs: { value: "yellow" } }, [_vm._v("Yellow")])
+          ]
+        )
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "form-group col-md-2" }, [
+        _c("label", [_vm._v("Border")]),
+        _vm._v(" "),
+        _c(
+          "select",
+          {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.style3.border,
+                expression: "style3.border"
+              }
+            ],
+            staticClass: "form-control",
+            on: {
+              change: function($event) {
+                var $$selectedVal = Array.prototype.filter
+                  .call($event.target.options, function(o) {
+                    return o.selected
+                  })
+                  .map(function(o) {
+                    var val = "_value" in o ? o._value : o.value
+                    return val
+                  })
+                _vm.$set(
+                  _vm.style3,
+                  "border",
+                  $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+                )
+              }
+            }
+          },
+          [
+            _c("option", [_vm._v("Border")]),
+            _vm._v(" "),
+            _c("option", { attrs: { value: "2px dashed red" } }, [
+              _vm._v("2px red")
+            ]),
+            _vm._v(" "),
+            _c("option", { attrs: { value: "4px dashed green" } }, [
+              _vm._v("4px green")
+            ]),
+            _vm._v(" "),
+            _c("option", { attrs: { value: "8px dashed blue" } }, [
+              _vm._v("8px blue")
+            ])
+          ]
+        )
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "form-group col-md-2" }, [
+        _c("label", [_vm._v("Text Transform")]),
+        _vm._v(" "),
+        _c(
+          "select",
+          {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.style4.textTransform,
+                expression: "style4.textTransform"
+              }
+            ],
+            staticClass: "form-control",
+            on: {
+              change: function($event) {
+                var $$selectedVal = Array.prototype.filter
+                  .call($event.target.options, function(o) {
+                    return o.selected
+                  })
+                  .map(function(o) {
+                    var val = "_value" in o ? o._value : o.value
+                    return val
+                  })
+                _vm.$set(
+                  _vm.style4,
+                  "textTransform",
+                  $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+                )
+              }
+            }
+          },
+          [
+            _c("option", [_vm._v("Transform")]),
+            _vm._v(" "),
+            _c("option", { attrs: { value: "capitalize" } }, [
+              _vm._v("Capitalize")
+            ]),
+            _vm._v(" "),
+            _c("option", { attrs: { value: "uppercase" } }, [
+              _vm._v("Uppercase")
+            ]),
+            _vm._v(" "),
+            _c("option", { attrs: { value: "lowercase" } }, [
+              _vm._v("Lowercase")
+            ])
+          ]
+        )
+      ])
+    ]),
+    _vm._v(" "),
+    _c("h2", [_vm._v("Top 10 Frameworks")]),
+    _vm._v(" "),
+    _c("table", { staticClass: "table table-bordered table-striped" }, [
+      _c("thead", { staticClass: "thead-dark" }, [
+        _c("tr", [
+          _c("th", [_vm._v("Framework")]),
+          _vm._v(" "),
+          _c(
+            "th",
+            {
+              class: ["sort-control", _vm.sortType],
+              on: { click: _vm.toggle }
+            },
+            [_vm._v("Score")]
+          )
+        ])
+      ]),
+      _vm._v(" "),
+      _c(
+        "tbody",
+        _vm._l(_vm.topTenFrameworksSorted, function(framework) {
           return _c("tr", [
             _c("td", [_vm._v(_vm._s(framework.name))]),
             _vm._v(" "),
-            _c("td", [_vm._v(_vm._s(framework.github))]),
-            _vm._v(" "),
-            _c("td", [_vm._v(_vm._s(framework.stackoverflow))]),
-            _vm._v(" "),
-            _c("td", [_vm._v(_vm._s(framework.overall))])
+            _c("td", [_vm._v(_vm._s(framework.score))])
           ])
-        })
-      ],
-      2
-    )
+        }),
+        0
+      )
+    ]),
+    _vm._v(" "),
+    _c("form", { staticClass: "form-inline" }, [
+      _c(
+        "select",
+        {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.title,
+              expression: "title"
+            }
+          ],
+          staticClass: "form-control mr-2",
+          on: {
+            change: function($event) {
+              var $$selectedVal = Array.prototype.filter
+                .call($event.target.options, function(o) {
+                  return o.selected
+                })
+                .map(function(o) {
+                  var val = "_value" in o ? o._value : o.value
+                  return val
+                })
+              _vm.title = $event.target.multiple
+                ? $$selectedVal
+                : $$selectedVal[0]
+            }
+          }
+        },
+        [
+          _c("option", { attrs: { value: "Mr." } }, [_vm._v("Mr.")]),
+          _vm._v(" "),
+          _c("option", { attrs: { value: "Ms." } }, [_vm._v("Ms.")])
+        ]
+      ),
+      _vm._v(" "),
+      _c("input", {
+        directives: [
+          {
+            name: "model",
+            rawName: "v-model",
+            value: _vm.name,
+            expression: "name"
+          }
+        ],
+        staticClass: "form-control mr-2",
+        attrs: { type: "text", placeholder: "Name" },
+        domProps: { value: _vm.name },
+        on: {
+          input: function($event) {
+            if ($event.target.composing) {
+              return
+            }
+            _vm.name = $event.target.value
+          }
+        }
+      }),
+      _vm._v(" "),
+      _c("input", {
+        directives: [
+          {
+            name: "model",
+            rawName: "v-model",
+            value: _vm.email,
+            expression: "email"
+          }
+        ],
+        staticClass: "form-control",
+        attrs: { type: "text", placeholder: "Email" },
+        domProps: { value: _vm.email },
+        on: {
+          input: function($event) {
+            if ($event.target.composing) {
+              return
+            }
+            _vm.email = $event.target.value
+          }
+        }
+      })
+    ]),
+    _vm._v(" "),
+    _c("hr"),
+    _vm._v(" "),
+    _c("div", { staticClass: "alert alert-info" }, [
+      _c("p", [_vm._v("Uppercase name: " + _vm._s(_vm.upperName()))]),
+      _vm._v(" "),
+      _c("p", [_vm._v("Lowercase name: " + _vm._s(_vm.lowerName))])
+    ])
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("tr", [
-      _c("th", [_vm._v("Framework")]),
-      _vm._v(" "),
-      _c("th", [_vm._v("Github Score")]),
-      _vm._v(" "),
-      _c("th", [_vm._v("Stack Overflow Score")]),
-      _vm._v(" "),
-      _c("th", [_vm._v("Overall Score")])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
