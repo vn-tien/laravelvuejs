@@ -1,104 +1,105 @@
 <template>
 
-    <div class="container py-5 mt-2">
-
-        <div v-if="showAlertPrimary" class="alert alert-primary">
-            v-if Alert
-        </div>
-        <div v-show="showAlertSecondary" class="alert alert-secondary">
-            v-show Alert
-        </div>
-
-        <div>
-            <button v-on:click="showAlertPrimary = !showAlertPrimary" class="btn btn-primary">Toggle Message (v-if)</button>
-            <button v-on:click="showAlertSecondary = !showAlertSecondary" class="btn btn-secondary">Toggle Message (v-show)</button>
-        </div>
-
-        <h1>Vote Your Favorite Frameworks</h1>
-        <ul class="list-group mb-3">
-            <li v-for="framework in favoriteFrameworks" class="list-group-item d-flex justify-content-between align-items-center">
-                {{ framework.name }}
-                <button v-on:click="upvote(framework)" class="btn btn-outline-primary">
-                    Upvote
-                    <span class="badge badge-primary badge-pill">{{ framework.votes }}</span>
-                </button>
-            </li>
-        </ul>
-
-        <div class="form-group">
-            <input v-on:keyup.enter="handleSubmit" v-on:keyup.esc="clearText" v-model="framework" type="text" class="form-control" placeholder="Enter Your another favorite Framework">
-        </div>
-
-        <h1 class="display-1 p-5" :style="[style1, style2, style3, style4]">Style me</h1>
-
-        <div class="form-row">
-            <div class="form-group col-md-2">
-                <label>Background</label>
-                <select v-model="style1.backgroundColor" class="form-control">
-                    <option>Background</option>
-                    <option value="white">White</option>
-                    <option value="red">Red</option>
-                    <option value="green">Green</option>
-                    <option value="blue">Blue</option>
-                </select>
+    <div>
+        <div class="card">
+            <div class="card-header">
+                <h2>Manage Products</h2>
             </div>
-            <div class="form-group col-md-2">
-                <label>Text Color</label>
-                <select v-model="style2.color" class="form-control">
-                    <option>Color</option>
-                    <option value="black">Black</option>
-                    <option value="white">White</option>
-                    <option value="yellow">Yellow</option>
-                </select>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-md-3">
+                        <a href="#" class="btn btn-primary" @click.prevent="add">
+                            <i class="fas fa-plus-circle"></i> Add New
+                        </a>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="form-inline justify-content-end">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <input type="text" v-model="filters.keywords" v-on:keyup.enter="search" v-on:keyup.esc="clearText" class="form-control" placeholder="Search...">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary" v-show="isSearching" v-on:click="clearText" type="button"><i class="fas fa-sync-alt"></i></button>
+                                        <button class="btn btn-outline-secondary" type="button" v-on:click="search" :disabled="keywordsIsInvalid"><i class="fas fa-search"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <table class="table table-striped table-hover">
+                    <thead>
+                    <tr>
+                        <th @click="sort('name')" :class="classes('name')">Product Name</th>
+                        <th @click="sort('category')" :class="classes('category')">Category</th>
+                        <th @click="sort('price')" :class="classes('price')">Price</th>
+                        <th width="100">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="product of productsPaginated">
+                        <td>{{ product.name }}</td>
+                        <td>{{ product.category }}</td>
+                        <td>{{ product.price }}</td>
+                        <td>
+                            <a href="#" class="btn btn-sm btn-outline-secondary" @click.prevent="edit(product)">
+                                <i class="fas fa-edit"></i>
+                            </a>
+
+                            <a href="#" class="btn btn-sm btn-outline-danger" @click.prevent="remove(product)">
+                                <i class="fas fa-times"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
-            <div class="form-group col-md-2">
-                <label>Border</label>
-                <select v-model="style3.border" class="form-control">
-                    <option>Border</option>
-                    <option value="2px dashed red">2px red</option>
-                    <option value="4px dashed green">4px green</option>
-                    <option value="8px dashed blue">8px blue</option>
-                </select>
-            </div>
-            <div class="form-group col-md-2">
-                <label>Text Transform</label>
-                <select v-model="style4.textTransform" class="form-control">
-                    <option>Transform</option>
-                    <option value="capitalize">Capitalize</option>
-                    <option value="uppercase">Uppercase</option>
-                    <option value="lowercase">Lowercase</option>
-                </select>
+            <div class="card-footer">
+                <nav>
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item" :class="{ disabled: isFirstPage }"><a class="page-link" href="#" @click.prevent="prev">Previous</a></li>
+                        <li class="page-item" :class="{ active: currentPage === page }" v-for="page in pages">
+                            <a class="page-link" href="#" @click.prevent="switchPage(page)">{{ page }}</a>
+                        </li>
+                        <li class="page-item" :class="{ disabled: isLastPage }"><a class="page-link" href="#" @click.prevent="next">Next</a></li>
+                    </ul>
+                </nav>
             </div>
         </div>
 
-        <h2>Top 10 Frameworks</h2>
-        <table class="table table-bordered table-striped">
-            <thead class="thead-dark">
-            <tr>
-                <th>Framework</th>
-                <th @click="toggle" :class="['sort-control', sortType]">Score</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr v-for="framework of topTenFrameworksSorted">
-                <td>{{ framework.name }}</td>
-                <td>{{ framework.score }}</td>
-            </tr>
-            </tbody>
-        </table>
-
-        <form class="form-inline">
-            <select v-model="title" class="form-control mr-2">
-                <option value="Mr.">Mr.</option>
-                <option value="Ms.">Ms.</option>
-            </select>
-            <input type="text" v-model="name" placeholder="Name" class="form-control mr-2">
-            <input type="text" v-model="email" placeholder="Email" class="form-control">
-        </form>
-        <hr>
-        <div class="alert alert-info">
-            <p>Uppercase name: {{ upperName() }}</p>
-            <p>Lowercase name: {{ lowerName }}</p>
+        <!-- Modal -->
+        <div class="modal fade" id="product-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" ref="vuemodal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">{{ modalTitle }}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="form-group">
+                                <label>Product Name</label>
+                                <input type="text" v-model="product.name" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label>Category</label>
+                                <select class="form-control" v-model="product.category">
+                                    <option v-for="category in categories" :value="category">{{ category }}</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Price ($)</label>
+                                <input type="number" v-model="product.price" class="form-control">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" @click.prevent="saveOrUpdate">{{ modalTextButton }}</button>
+                    </div>
+                </div>
+            </div>
         </div>
 
     </div>
@@ -108,89 +109,402 @@
 <script>
     export default {
         mounted() {
-            this.title = "Mr.",
             console.log('Component mounted.')
         },
         data: function () {
             return {
-                topTenFrameworks: [
-                    { name: "Spring", score: 88 },
-                    { name: "ASP NET", score: 100 },
-                    { name: "Ruby on Rails", score: 95 },
-                    { name: "Express", score: 87 },
-                    { name: "AngularJS", score: 96 },
-                    { name: "Django", score: 91 },
-                    { name: "Angular", score: 89 },
-                    { name: "Laravel", score: 89 },
-                    { name: "React", score: 93 },
-                    { name: "Vue.js", score: 89}
+                products: [
+                    {
+                        "id": 1,
+                        "name":"Intelligent Granite Table",
+                        "category":"Tools",
+                        "price":"787.00"
+                    },
+                    {
+                        "id": 2,
+                        "name":"Handcrafted Rubber Hat",
+                        "category":"Games",
+                        "price":"232.00"
+                    },
+                    {
+                        "id": 3,
+                        "name":"Rustic Concrete Salad",
+                        "category":"Jewelery",
+                        "price":"115.00"
+                    },
+                    {
+                        "id": 4,
+                        "name":"Gorgeous Concrete Pizza",
+                        "category":"Garden",
+                        "price":"250.00"
+                    },
+                    {
+                        "id": 5,
+                        "name":"Refined Plastic Shoes",
+                        "category":"Health",
+                        "price":"844.00"
+                    },
+                    {
+                        "id": 6,
+                        "name":"Awesome Metal Soap",
+                        "category":"Tools",
+                        "price":"326.00"
+                    },
+                    {
+                        "id": 7,
+                        "name":"Intelligent Fresh Mouse",
+                        "category":"Home",
+                        "price":"783.00"
+                    },
+                    {
+                        "id": 8,
+                        "name":"Licensed Soft Keyboard",
+                        "category":"Music",
+                        "price":"361.00"
+                    },
+                    {
+                        "id": 9,
+                        "name":"Fantastic Rubber Pants",
+                        "category":"Garden",
+                        "price":"786.00"
+                    },
+                    {
+                        "id": 10,
+                        "name":"Awesome Rubber Ball",
+                        "category":"Automotive",
+                        "price":"696.00"
+                    },
+                    {
+                        "id": 11,
+                        "name":"Handcrafted Soft Pizza",
+                        "category":"Health",
+                        "price":"31.00"
+                    },
+                    {
+                        "id": 12,
+                        "name":"Practical Soft Chips",
+                        "category":"Computers",
+                        "price":"795.00"
+                    },
+                    {
+                        "id": 13,
+                        "name":"Practical Frozen Shirt",
+                        "category":"Kids",
+                        "price":"879.00"
+                    },
+                    {
+                        "id": 14,
+                        "name":"Unbranded Plastic Car",
+                        "category":"Toys",
+                        "price":"454.00"
+                    },
+                    {
+                        "id": 15,
+                        "name":"Handcrafted Plastic Table",
+                        "category":"Shoes",
+                        "price":"189.00"
+                    },
+                    {
+                        "id": 16,
+                        "name":"Intelligent Plastic Car",
+                        "category":"Grocery",
+                        "price":"202.00"
+                    },
+                    {
+                        "id": 17,
+                        "name":"Ergonomic Wooden Pizza",
+                        "category":"Electronics",
+                        "price":"801.00"
+                    },
+                    {
+                        "id": 18,
+                        "name":"Refined Rubber Pants",
+                        "category":"Home",
+                        "price":"580.00"
+                    },
+                    {
+                        "id": 19,
+                        "name":"Small Frozen Hat",
+                        "category":"Music",
+                        "price":"654.00"
+                    },
+                    {
+                        "id": 20,
+                        "name":"Unbranded Cotton Chips",
+                        "category":"Tools",
+                        "price":"305.00"
+                    },
+                    {
+                        "id": 21,
+                        "name":"Unbranded Plastic Chicken",
+                        "category":"Baby",
+                        "price":"943.00"
+                    },
+                    {
+                        "id": 22,
+                        "name":"Rustic Fresh Pizza",
+                        "category":"Toys",
+                        "price":"647.00"
+                    },
+                    {
+                        "id": 23,
+                        "name":"Ergonomic Metal Tuna",
+                        "category":"Industrial",
+                        "price":"51.00"
+                    },
+                    {
+                        "id": 24,
+                        "name":"Unbranded Frozen Chicken",
+                        "category":"Movies",
+                        "price":"248.00"
+                    },
+                    {
+                        "id": 25,
+                        "name":"Ergonomic Cotton Table",
+                        "category":"Baby",
+                        "price":"4.00"
+                    },
+                    {
+                        "id": 26,
+                        "name":"Handmade Frozen Pants",
+                        "category":"Home",
+                        "price":"731.00"
+                    },
+                    {
+                        "id": 27,
+                        "name":"Rustic Cotton Bike",
+                        "category":"Jewelery",
+                        "price":"161.00"
+                    },
+                    {
+                        "id": 28,
+                        "name":"Licensed Metal Bacon",
+                        "category":"Books",
+                        "price":"331.00"
+                    },
+                    {
+                        "id": 29,
+                        "name":"Practical Cotton Soap",
+                        "category":"Books",
+                        "price":"861.00"
+                    },
+                    {
+                        "id": 30,
+                        "name":"Sleek Frozen Tuna",
+                        "category":"Electronics",
+                        "price":"375.00"
+                    }
                 ],
-                name: 'John Doe',
-                email: 'johndoe@test.com',
-                order: 1,
-                showAlertPrimary: true,
-                showAlertSecondary: true,
-                favoriteFrameworks: [
-                    { name: "Angular", votes: 0 },
-                    { name: "React.js", votes: 3 },
-                    { name: "Vue.js", votes: 7 },
-                ],
-                framework: '',
-                style1: {
-                    backgroundColor: 'white'
+
+                order: {
+                    dir: 1,
+
+                    column: 'price'
                 },
-                style2: {
-                    color: 'black'
+
+                filters: {
+                    name: '',
+
+                    keywords: ''
                 },
-                style3: {
-                    border: '2px dashed red'
+
+                isSearching: false,
+
+                perPage: 10,
+
+                currentPage: 1,
+
+                product: {
+                    id: null,
+                    name: '',
+                    category: '',
+                    price: ''
                 },
-                style4: {
-                    textTransform: 'lowercase'
-                },
-                alertType: 'alert-primary'
+
+                isEdit: false
             }
         },
         computed: {
+            categories () {
+                let categories = this.products.map(el => el.category);
 
-            lowerName () {
-                console.log('computed lowerName ()');
-                return (this.usingMyConstant() + " " + this.name).toLowerCase();
+                return Array.from(new Set(categories))
+                    .sort((a, b) => {
+                        if (a < b) return -1;
+                        else if (a > b) return 1;
+                        else return 0;
+                    });
             },
-            topTenFrameworksSorted () {
-                return this.topTenFrameworks.sort((a, b) => (a.score - b.score) * this.order);
+
+            productsPaginated () {
+                let start = (this.currentPage - 1) * this.perPage
+                let end = this.currentPage * this.perPage
+                return this.productsSorted.slice(start, end)
+            },
+
+            productsSorted () {
+                return this.productsFiltered.sort((a, b) => {
+                    let left = a[this.order.column], right = b[this.order.column];
+
+                    if (isNaN(left) && isNaN(right)) {
+                        if (left < right) return -1 * this.order.dir;
+                        else if (left > right) return 1 * this.order.dir;
+                        else return 0;
+                    } else {
+                        return (left - right) * this.order.dir
+                    }
+                });
             },
 
             sortType () {
-                return this.order === 1 ? 'ascending' : 'descending';
+                return this.order.dir === 1 ? 'ascending' : 'descending'
+            },
+
+            keywordsIsInvalid () {
+                return this.filters.keywords.length < 3;
+            },
+
+            productsFiltered () {
+                let products = this.products;
+
+                if (this.filters.name) {
+                    let findName = new RegExp(this.filters.name, 'i');
+                    products = products.filter(el => el.name.match(findName))
+                }
+
+                return products;
+            },
+
+            isFirstPage () {
+                return this.currentPage === 1;
+            },
+
+            isLastPage () {
+                return this.currentPage >= this.pages;
+            },
+
+            pages () {
+                return Math.ceil(this.productsFiltered.length / this.perPage);
+            },
+
+            modalTitle () {
+                return this.isEdit ? "Update Product" : "Add New Product"
+            },
+
+            modalTextButton () {
+                return this.isEdit ? "Update" : "Save"
             }
         },
         methods: {
-            usingMyConstant () {
-                return this.title;
+            add () {
+                this.isEdit = false;
+
+                this.product = {
+                    id: null,
+                    name: '',
+                    category: '',
+                    price: ''
+                }
+
+                $(this.$refs.vuemodal).modal('show');
             },
-            upperName () {
-                console.log('upperName ()');
-                return (this.usingMyConstant() + " " + this.name).toUpperCase();
+
+
+            edit (product) {
+                this.product = Object.assign({}, product);
+
+                this.isEdit = true
+
+                $(this.$refs.vuemodal).modal('show');
             },
-            toggle () {
-                return this.order *= -1;
-            },
-            upvote (framework) {
-                framework.votes++
-            },
-            handleSubmit () {
-                if (this.framework.trim()) {
-                    this.favoriteFrameworks.push({
-                        name: this.framework,
-                        votes: 8
-                    });
-                    this.framework = ''
+
+            saveOrUpdate () {
+                if (this.isEdit) {
+                    this.update();
+                } else {
+                    this.save();
                 }
             },
+
+            update () {
+                let index = this.products.findIndex(item => item.id === this.product.id);
+
+                this.products.splice(index, 1, this.product);
+
+                this.isEdit = false;
+
+                $(this.$refs.vuemodal).modal('hide');
+            },
+
+            save () {
+                if (this.product.name && this.product.category && this.product.price) {
+                    this.product.id = this.products.length + 1
+
+                    this.products.unshift(this.product)
+
+                    this.product = {
+                        id: null,
+                        name: '',
+                        category: '',
+                        price: ''
+                    }
+
+                    $(this.$refs.vuemodal).modal('hide');
+                } else {
+                    alert("Please fill in the form properly")
+                }
+            },
+
+            remove (product) {
+                if (confirm("Are you sure?")) {
+                    let index = this.products.findIndex(item => item.id === product.id);
+
+                    this.products.splice(index, 1);
+                }
+            },
+
+            switchPage (page) {
+                this.currentPage = page
+            },
+
+            prev () {
+                if (!this.isFirstPage) {
+                    this.currentPage--;
+                }
+            },
+
+            next () {
+                if (!this.isLastPage) {
+                    this.currentPage++;
+                }
+            },
+
+            classes (column) {
+                return [
+                    'sort-control',
+                    column === this.order.column ? this.sortType : ''
+                ]
+            },
+
+            sort (column) {
+                this.order.column = column;
+                this.order.dir *= -1;
+            },
+
             clearText () {
-                this.framework = ''
+                this.filters.name = this.filters.keywords = "";
+
+                this.isSearching = false
+            },
+
+            search () {
+                if (!this.keywordsIsInvalid) {
+                    this.filters.name = this.filters.keywords;
+
+                    this.isSearching = true
+                }
             }
         }
     }
 </script>
+
