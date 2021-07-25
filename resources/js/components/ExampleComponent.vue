@@ -36,7 +36,10 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr v-for="product of productsPaginated">
+                    <tr
+                        v-for="product of productsPaginated"
+                        :class="{ 'table-danger': removedProductId == product.id}"
+                    >
                         <td>{{ product.name }}</td>
                         <td>{{ product.category }}</td>
                         <td>{{ product.price }}</td>
@@ -80,17 +83,20 @@
                         <form>
                             <div class="form-group">
                                 <label>Product Name</label>
-                                <input type="text" v-model="product.name" class="form-control">
+                                <input type="text" v-model="product.name" class="form-control" :class="{ 'is-invalid': errors.name }">
+                                <span class="invalid-feedback" v-if="errors.name">{{ errors.name[0] }}</span>
                             </div>
                             <div class="form-group">
                                 <label>Category</label>
-                                <select class="form-control" v-model="product.category">
-                                    <option v-for="category in categories" :value="category">{{ category }}</option>
+                                <select class="form-control" :class="{ 'is-invalid': errors.category_id }" v-model="product.category_id">
+                                    <option v-for="category in categories" :value="category.id">{{ category.name }}</option>
                                 </select>
+                                <span class="invalid-feedback" v-if="errors.category_id">{{ errors.category_id[0] }}</span>
                             </div>
                             <div class="form-group">
                                 <label>Price ($)</label>
-                                <input type="number" v-model="product.price" class="form-control">
+                                <input type="number" v-model="product.price" class="form-control" :class="{ 'is-invalid': errors.price }">
+                                <span class="invalid-feedback" v-if="errors.price">{{ errors.price[0] }}</span>
                             </div>
                         </form>
                     </div>
@@ -101,205 +107,21 @@
                 </div>
             </div>
         </div>
-
     </div>
 
 </template>
 
 <script>
     export default {
-        mounted() {
-            console.log('Component mounted.')
-        },
         data: function () {
             return {
-                products: [
-                    {
-                        "id": 1,
-                        "name":"Intelligent Granite Table",
-                        "category":"Tools",
-                        "price":"787.00"
-                    },
-                    {
-                        "id": 2,
-                        "name":"Handcrafted Rubber Hat",
-                        "category":"Games",
-                        "price":"232.00"
-                    },
-                    {
-                        "id": 3,
-                        "name":"Rustic Concrete Salad",
-                        "category":"Jewelery",
-                        "price":"115.00"
-                    },
-                    {
-                        "id": 4,
-                        "name":"Gorgeous Concrete Pizza",
-                        "category":"Garden",
-                        "price":"250.00"
-                    },
-                    {
-                        "id": 5,
-                        "name":"Refined Plastic Shoes",
-                        "category":"Health",
-                        "price":"844.00"
-                    },
-                    {
-                        "id": 6,
-                        "name":"Awesome Metal Soap",
-                        "category":"Tools",
-                        "price":"326.00"
-                    },
-                    {
-                        "id": 7,
-                        "name":"Intelligent Fresh Mouse",
-                        "category":"Home",
-                        "price":"783.00"
-                    },
-                    {
-                        "id": 8,
-                        "name":"Licensed Soft Keyboard",
-                        "category":"Music",
-                        "price":"361.00"
-                    },
-                    {
-                        "id": 9,
-                        "name":"Fantastic Rubber Pants",
-                        "category":"Garden",
-                        "price":"786.00"
-                    },
-                    {
-                        "id": 10,
-                        "name":"Awesome Rubber Ball",
-                        "category":"Automotive",
-                        "price":"696.00"
-                    },
-                    {
-                        "id": 11,
-                        "name":"Handcrafted Soft Pizza",
-                        "category":"Health",
-                        "price":"31.00"
-                    },
-                    {
-                        "id": 12,
-                        "name":"Practical Soft Chips",
-                        "category":"Computers",
-                        "price":"795.00"
-                    },
-                    {
-                        "id": 13,
-                        "name":"Practical Frozen Shirt",
-                        "category":"Kids",
-                        "price":"879.00"
-                    },
-                    {
-                        "id": 14,
-                        "name":"Unbranded Plastic Car",
-                        "category":"Toys",
-                        "price":"454.00"
-                    },
-                    {
-                        "id": 15,
-                        "name":"Handcrafted Plastic Table",
-                        "category":"Shoes",
-                        "price":"189.00"
-                    },
-                    {
-                        "id": 16,
-                        "name":"Intelligent Plastic Car",
-                        "category":"Grocery",
-                        "price":"202.00"
-                    },
-                    {
-                        "id": 17,
-                        "name":"Ergonomic Wooden Pizza",
-                        "category":"Electronics",
-                        "price":"801.00"
-                    },
-                    {
-                        "id": 18,
-                        "name":"Refined Rubber Pants",
-                        "category":"Home",
-                        "price":"580.00"
-                    },
-                    {
-                        "id": 19,
-                        "name":"Small Frozen Hat",
-                        "category":"Music",
-                        "price":"654.00"
-                    },
-                    {
-                        "id": 20,
-                        "name":"Unbranded Cotton Chips",
-                        "category":"Tools",
-                        "price":"305.00"
-                    },
-                    {
-                        "id": 21,
-                        "name":"Unbranded Plastic Chicken",
-                        "category":"Baby",
-                        "price":"943.00"
-                    },
-                    {
-                        "id": 22,
-                        "name":"Rustic Fresh Pizza",
-                        "category":"Toys",
-                        "price":"647.00"
-                    },
-                    {
-                        "id": 23,
-                        "name":"Ergonomic Metal Tuna",
-                        "category":"Industrial",
-                        "price":"51.00"
-                    },
-                    {
-                        "id": 24,
-                        "name":"Unbranded Frozen Chicken",
-                        "category":"Movies",
-                        "price":"248.00"
-                    },
-                    {
-                        "id": 25,
-                        "name":"Ergonomic Cotton Table",
-                        "category":"Baby",
-                        "price":"4.00"
-                    },
-                    {
-                        "id": 26,
-                        "name":"Handmade Frozen Pants",
-                        "category":"Home",
-                        "price":"731.00"
-                    },
-                    {
-                        "id": 27,
-                        "name":"Rustic Cotton Bike",
-                        "category":"Jewelery",
-                        "price":"161.00"
-                    },
-                    {
-                        "id": 28,
-                        "name":"Licensed Metal Bacon",
-                        "category":"Books",
-                        "price":"331.00"
-                    },
-                    {
-                        "id": 29,
-                        "name":"Practical Cotton Soap",
-                        "category":"Books",
-                        "price":"861.00"
-                    },
-                    {
-                        "id": 30,
-                        "name":"Sleek Frozen Tuna",
-                        "category":"Electronics",
-                        "price":"375.00"
-                    }
-                ],
+                products: [],
+                categories: [],
 
                 order: {
                     dir: 1,
 
-                    column: 'price'
+                    column: 'name'
                 },
 
                 filters: {
@@ -317,25 +139,24 @@
                 product: {
                     id: null,
                     name: '',
-                    category: '',
+                    category_id: '',
                     price: ''
                 },
 
-                isEdit: false
+                isEdit: false,
+
+                errors: {},
+
+                removedProductId: null,
             }
         },
+
+        mounted () {
+            this.fetchProducts();
+            this.fetchCategories();
+        },
+
         computed: {
-            categories () {
-                let categories = this.products.map(el => el.category);
-
-                return Array.from(new Set(categories))
-                    .sort((a, b) => {
-                        if (a < b) return -1;
-                        else if (a > b) return 1;
-                        else return 0;
-                    });
-            },
-
             productsPaginated () {
                 let start = (this.currentPage - 1) * this.perPage
                 let end = this.currentPage * this.perPage
@@ -395,7 +216,22 @@
                 return this.isEdit ? "Update" : "Save"
             }
         },
+
         methods: {
+            fetchProducts () {
+                axios.get('/products')
+                    .then(({ data }) => {
+                        this.products = data.data
+                    })
+            },
+
+            fetchCategories () {
+                axios.get('/categories')
+                    .then(({ data }) => {
+                        this.categories = data.data
+                    })
+            },
+
             add () {
                 this.isEdit = false;
 
@@ -427,39 +263,66 @@
             },
 
             update () {
-                let index = this.products.findIndex(item => item.id === this.product.id);
+                this.product.price = this.product.price * 100;
 
-                this.products.splice(index, 1, this.product);
+                axios.put('/products/' + this.product.id, this.product)
+                    .then(({ data }) => {
+                        let index = this.products.findIndex(item => item.id === this.product.id);
 
-                this.isEdit = false;
+                        this.products.splice(index, 1, data.data);
 
-                $(this.$refs.vuemodal).modal('hide');
+                        this.isEdit = false;
+
+                        $(this.$refs.vuemodal).modal('hide');
+                    })
+                    .catch(({ response }) => {
+                        this.errors = response.data.errors
+                    })
             },
 
             save () {
-                if (this.product.name && this.product.category && this.product.price) {
-                    this.product.id = this.products.length + 1
+                this.product.price = this.product.price * 100
 
-                    this.products.unshift(this.product)
+                axios.post('/products', this.product)
+                    .then(({ data }) => {
+                        this.productsPaginated.unshift(data.data)
 
-                    this.product = {
-                        id: null,
-                        name: '',
-                        category: '',
-                        price: ''
-                    }
+                        this.product = {
+                            id: null,
+                            name: '',
+                            category: '',
+                            price: ''
+                        }
 
-                    $(this.$refs.vuemodal).modal('hide');
-                } else {
-                    alert("Please fill in the form properly")
-                }
+                        this.errors = {}
+
+                        $(this.$refs.vuemodal).modal('hide');
+                    })
+                    .catch(( { response }) => {
+                        this.errors = response.data.errors
+                    })
             },
 
             remove (product) {
                 if (confirm("Are you sure?")) {
-                    let index = this.products.findIndex(item => item.id === product.id);
+                    axios.delete('/products/' + product.id)
+                        .then(res => {
+                            // store the product.id in removedProductId
+                            this.removedProductId = product.id
 
-                    this.products.splice(index, 1);
+                            // delay the execution for 1 second
+                            // then set the removedProductId back to null to detach
+                            // the table-danger class from <tr>
+                            // after that remove the tr from UI
+                            new Promise(resolve => setTimeout(resolve, 1000))
+                                .then(() => {
+                                    this.removedProductId = null
+
+                                    let index = this.products.findIndex(item => item.id === product.id);
+
+                                    this.products.splice(index, 1);
+                                })
+                        })
                 }
             },
 

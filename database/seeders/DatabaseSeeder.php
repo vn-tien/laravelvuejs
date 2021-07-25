@@ -1,7 +1,5 @@
 <?php
 
-namespace Database\Seeders;
-
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -13,6 +11,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
+        factory(App\Models\User::class, 3)->create()->each(function($u) {
+            $u->questions()
+              ->saveMany(
+                  factory(App\Models\Question::class, rand(1, 5))->make()
+              );
+        });
     }
 }

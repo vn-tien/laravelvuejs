@@ -1953,166 +1953,19 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  mounted: function mounted() {
-    console.log('Component mounted.');
-  },
   data: function data() {
     return {
-      products: [{
-        "id": 1,
-        "name": "Intelligent Granite Table",
-        "category": "Tools",
-        "price": "787.00"
-      }, {
-        "id": 2,
-        "name": "Handcrafted Rubber Hat",
-        "category": "Games",
-        "price": "232.00"
-      }, {
-        "id": 3,
-        "name": "Rustic Concrete Salad",
-        "category": "Jewelery",
-        "price": "115.00"
-      }, {
-        "id": 4,
-        "name": "Gorgeous Concrete Pizza",
-        "category": "Garden",
-        "price": "250.00"
-      }, {
-        "id": 5,
-        "name": "Refined Plastic Shoes",
-        "category": "Health",
-        "price": "844.00"
-      }, {
-        "id": 6,
-        "name": "Awesome Metal Soap",
-        "category": "Tools",
-        "price": "326.00"
-      }, {
-        "id": 7,
-        "name": "Intelligent Fresh Mouse",
-        "category": "Home",
-        "price": "783.00"
-      }, {
-        "id": 8,
-        "name": "Licensed Soft Keyboard",
-        "category": "Music",
-        "price": "361.00"
-      }, {
-        "id": 9,
-        "name": "Fantastic Rubber Pants",
-        "category": "Garden",
-        "price": "786.00"
-      }, {
-        "id": 10,
-        "name": "Awesome Rubber Ball",
-        "category": "Automotive",
-        "price": "696.00"
-      }, {
-        "id": 11,
-        "name": "Handcrafted Soft Pizza",
-        "category": "Health",
-        "price": "31.00"
-      }, {
-        "id": 12,
-        "name": "Practical Soft Chips",
-        "category": "Computers",
-        "price": "795.00"
-      }, {
-        "id": 13,
-        "name": "Practical Frozen Shirt",
-        "category": "Kids",
-        "price": "879.00"
-      }, {
-        "id": 14,
-        "name": "Unbranded Plastic Car",
-        "category": "Toys",
-        "price": "454.00"
-      }, {
-        "id": 15,
-        "name": "Handcrafted Plastic Table",
-        "category": "Shoes",
-        "price": "189.00"
-      }, {
-        "id": 16,
-        "name": "Intelligent Plastic Car",
-        "category": "Grocery",
-        "price": "202.00"
-      }, {
-        "id": 17,
-        "name": "Ergonomic Wooden Pizza",
-        "category": "Electronics",
-        "price": "801.00"
-      }, {
-        "id": 18,
-        "name": "Refined Rubber Pants",
-        "category": "Home",
-        "price": "580.00"
-      }, {
-        "id": 19,
-        "name": "Small Frozen Hat",
-        "category": "Music",
-        "price": "654.00"
-      }, {
-        "id": 20,
-        "name": "Unbranded Cotton Chips",
-        "category": "Tools",
-        "price": "305.00"
-      }, {
-        "id": 21,
-        "name": "Unbranded Plastic Chicken",
-        "category": "Baby",
-        "price": "943.00"
-      }, {
-        "id": 22,
-        "name": "Rustic Fresh Pizza",
-        "category": "Toys",
-        "price": "647.00"
-      }, {
-        "id": 23,
-        "name": "Ergonomic Metal Tuna",
-        "category": "Industrial",
-        "price": "51.00"
-      }, {
-        "id": 24,
-        "name": "Unbranded Frozen Chicken",
-        "category": "Movies",
-        "price": "248.00"
-      }, {
-        "id": 25,
-        "name": "Ergonomic Cotton Table",
-        "category": "Baby",
-        "price": "4.00"
-      }, {
-        "id": 26,
-        "name": "Handmade Frozen Pants",
-        "category": "Home",
-        "price": "731.00"
-      }, {
-        "id": 27,
-        "name": "Rustic Cotton Bike",
-        "category": "Jewelery",
-        "price": "161.00"
-      }, {
-        "id": 28,
-        "name": "Licensed Metal Bacon",
-        "category": "Books",
-        "price": "331.00"
-      }, {
-        "id": 29,
-        "name": "Practical Cotton Soap",
-        "category": "Books",
-        "price": "861.00"
-      }, {
-        "id": 30,
-        "name": "Sleek Frozen Tuna",
-        "category": "Electronics",
-        "price": "375.00"
-      }],
+      products: [],
+      categories: [],
       order: {
         dir: 1,
-        column: 'price'
+        column: 'name'
       },
       filters: {
         name: '',
@@ -2124,21 +1977,19 @@ __webpack_require__.r(__webpack_exports__);
       product: {
         id: null,
         name: '',
-        category: '',
+        category_id: '',
         price: ''
       },
-      isEdit: false
+      isEdit: false,
+      errors: {},
+      removedProductId: null
     };
   },
+  mounted: function mounted() {
+    this.fetchProducts();
+    this.fetchCategories();
+  },
   computed: {
-    categories: function categories() {
-      var categories = this.products.map(function (el) {
-        return el.category;
-      });
-      return Array.from(new Set(categories)).sort(function (a, b) {
-        if (a < b) return -1;else if (a > b) return 1;else return 0;
-      });
-    },
     productsPaginated: function productsPaginated() {
       var start = (this.currentPage - 1) * this.perPage;
       var end = this.currentPage * this.perPage;
@@ -2193,6 +2044,22 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
+    fetchProducts: function fetchProducts() {
+      var _this2 = this;
+
+      axios.get('/products').then(function (_ref) {
+        var data = _ref.data;
+        _this2.products = data.data;
+      });
+    },
+    fetchCategories: function fetchCategories() {
+      var _this3 = this;
+
+      axios.get('/categories').then(function (_ref2) {
+        var data = _ref2.data;
+        _this3.categories = data.data;
+      });
+    },
     add: function add() {
       this.isEdit = false;
       this.product = {
@@ -2216,36 +2083,70 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     update: function update() {
-      var _this2 = this;
+      var _this4 = this;
 
-      var index = this.products.findIndex(function (item) {
-        return item.id === _this2.product.id;
+      this.product.price = this.product.price * 100;
+      axios.put('/products/' + this.product.id, this.product).then(function (_ref3) {
+        var data = _ref3.data;
+
+        var index = _this4.products.findIndex(function (item) {
+          return item.id === _this4.product.id;
+        });
+
+        _this4.products.splice(index, 1, data.data);
+
+        _this4.isEdit = false;
+        $(_this4.$refs.vuemodal).modal('hide');
+      })["catch"](function (_ref4) {
+        var response = _ref4.response;
+        _this4.errors = response.data.errors;
       });
-      this.products.splice(index, 1, this.product);
-      this.isEdit = false;
-      $(this.$refs.vuemodal).modal('hide');
     },
     save: function save() {
-      if (this.product.name && this.product.category && this.product.price) {
-        this.product.id = this.products.length + 1;
-        this.products.unshift(this.product);
-        this.product = {
+      var _this5 = this;
+
+      this.product.price = this.product.price * 100;
+      axios.post('/products', this.product).then(function (_ref5) {
+        var data = _ref5.data;
+
+        _this5.productsPaginated.unshift(data.data);
+
+        _this5.product = {
           id: null,
           name: '',
           category: '',
           price: ''
         };
-        $(this.$refs.vuemodal).modal('hide');
-      } else {
-        alert("Please fill in the form properly");
-      }
+        _this5.errors = {};
+        $(_this5.$refs.vuemodal).modal('hide');
+      })["catch"](function (_ref6) {
+        var response = _ref6.response;
+        _this5.errors = response.data.errors;
+      });
     },
     remove: function remove(product) {
+      var _this6 = this;
+
       if (confirm("Are you sure?")) {
-        var index = this.products.findIndex(function (item) {
-          return item.id === product.id;
+        axios["delete"]('/products/' + product.id).then(function (res) {
+          // store the product.id in removedProductId
+          _this6.removedProductId = product.id; // delay the execution for 1 second
+          // then set the removedProductId back to null to detach
+          // the table-danger class from <tr>
+          // after that remove the tr from UI
+
+          new Promise(function (resolve) {
+            return setTimeout(resolve, 1000);
+          }).then(function () {
+            _this6.removedProductId = null;
+
+            var index = _this6.products.findIndex(function (item) {
+              return item.id === product.id;
+            });
+
+            _this6.products.splice(index, 1);
+          });
         });
-        this.products.splice(index, 1);
       }
     },
     switchPage: function switchPage(page) {
@@ -2314,6 +2215,7 @@ Vue.component('example-component', __webpack_require__(/*! ./components/ExampleC
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
+axios.defaults.baseURL = "http://basic-app.test/api";
 var app = new Vue({
   el: '#app'
 });
@@ -38003,45 +37905,51 @@ var render = function() {
           _c(
             "tbody",
             _vm._l(_vm.productsPaginated, function(product) {
-              return _c("tr", [
-                _c("td", [_vm._v(_vm._s(product.name))]),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(product.category))]),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(product.price))]),
-                _vm._v(" "),
-                _c("td", [
-                  _c(
-                    "a",
-                    {
-                      staticClass: "btn btn-sm btn-outline-secondary",
-                      attrs: { href: "#" },
-                      on: {
-                        click: function($event) {
-                          $event.preventDefault()
-                          return _vm.edit(product)
-                        }
-                      }
-                    },
-                    [_c("i", { staticClass: "fas fa-edit" })]
-                  ),
+              return _c(
+                "tr",
+                {
+                  class: { "table-danger": _vm.removedProductId == product.id }
+                },
+                [
+                  _c("td", [_vm._v(_vm._s(product.name))]),
                   _vm._v(" "),
-                  _c(
-                    "a",
-                    {
-                      staticClass: "btn btn-sm btn-outline-danger",
-                      attrs: { href: "#" },
-                      on: {
-                        click: function($event) {
-                          $event.preventDefault()
-                          return _vm.remove(product)
+                  _c("td", [_vm._v(_vm._s(product.category))]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v(_vm._s(product.price))]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _c(
+                      "a",
+                      {
+                        staticClass: "btn btn-sm btn-outline-secondary",
+                        attrs: { href: "#" },
+                        on: {
+                          click: function($event) {
+                            $event.preventDefault()
+                            return _vm.edit(product)
+                          }
                         }
-                      }
-                    },
-                    [_c("i", { staticClass: "fas fa-times" })]
-                  )
-                ])
-              ])
+                      },
+                      [_c("i", { staticClass: "fas fa-edit" })]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "a",
+                      {
+                        staticClass: "btn btn-sm btn-outline-danger",
+                        attrs: { href: "#" },
+                        on: {
+                          click: function($event) {
+                            $event.preventDefault()
+                            return _vm.remove(product)
+                          }
+                        }
+                      },
+                      [_c("i", { staticClass: "fas fa-times" })]
+                    )
+                  ])
+                ]
+              )
             }),
             0
           )
@@ -38178,6 +38086,7 @@ var render = function() {
                       }
                     ],
                     staticClass: "form-control",
+                    class: { "is-invalid": _vm.errors.name },
                     attrs: { type: "text" },
                     domProps: { value: _vm.product.name },
                     on: {
@@ -38188,7 +38097,13 @@ var render = function() {
                         _vm.$set(_vm.product, "name", $event.target.value)
                       }
                     }
-                  })
+                  }),
+                  _vm._v(" "),
+                  _vm.errors.name
+                    ? _c("span", { staticClass: "invalid-feedback" }, [
+                        _vm._v(_vm._s(_vm.errors.name[0]))
+                      ])
+                    : _vm._e()
                 ]),
                 _vm._v(" "),
                 _c("div", { staticClass: "form-group" }, [
@@ -38201,11 +38116,12 @@ var render = function() {
                         {
                           name: "model",
                           rawName: "v-model",
-                          value: _vm.product.category,
-                          expression: "product.category"
+                          value: _vm.product.category_id,
+                          expression: "product.category_id"
                         }
                       ],
                       staticClass: "form-control",
+                      class: { "is-invalid": _vm.errors.category_id },
                       on: {
                         change: function($event) {
                           var $$selectedVal = Array.prototype.filter
@@ -38218,7 +38134,7 @@ var render = function() {
                             })
                           _vm.$set(
                             _vm.product,
-                            "category",
+                            "category_id",
                             $event.target.multiple
                               ? $$selectedVal
                               : $$selectedVal[0]
@@ -38227,12 +38143,20 @@ var render = function() {
                       }
                     },
                     _vm._l(_vm.categories, function(category) {
-                      return _c("option", { domProps: { value: category } }, [
-                        _vm._v(_vm._s(category))
-                      ])
+                      return _c(
+                        "option",
+                        { domProps: { value: category.id } },
+                        [_vm._v(_vm._s(category.name))]
+                      )
                     }),
                     0
-                  )
+                  ),
+                  _vm._v(" "),
+                  _vm.errors.category_id
+                    ? _c("span", { staticClass: "invalid-feedback" }, [
+                        _vm._v(_vm._s(_vm.errors.category_id[0]))
+                      ])
+                    : _vm._e()
                 ]),
                 _vm._v(" "),
                 _c("div", { staticClass: "form-group" }, [
@@ -38248,6 +38172,7 @@ var render = function() {
                       }
                     ],
                     staticClass: "form-control",
+                    class: { "is-invalid": _vm.errors.price },
                     attrs: { type: "number" },
                     domProps: { value: _vm.product.price },
                     on: {
@@ -38258,7 +38183,13 @@ var render = function() {
                         _vm.$set(_vm.product, "price", $event.target.value)
                       }
                     }
-                  })
+                  }),
+                  _vm._v(" "),
+                  _vm.errors.price
+                    ? _c("span", { staticClass: "invalid-feedback" }, [
+                        _vm._v(_vm._s(_vm.errors.price[0]))
+                      ])
+                    : _vm._e()
                 ])
               ])
             ]),

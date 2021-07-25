@@ -27,6 +27,8 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
+axios.defaults.baseURL = "http://basic-app.test/api";
+
 const app = new Vue({
     el: '#app',
 });
