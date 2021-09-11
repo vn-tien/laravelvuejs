@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddForeignBestAnswerIdToQuestionsTable extends Migration
+class RenameVotesOnQuestionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,10 +14,7 @@ class AddForeignBestAnswerIdToQuestionsTable extends Migration
     public function up()
     {
         Schema::table('questions', function (Blueprint $table) {
-            $table->foreign('best_answer_id')
-                  ->references('id')
-                  ->on('answers')
-                  ->onDelete('SET NULL');
+            $table->renameColumn('votes', 'votes_count');
         });
     }
 
@@ -29,7 +26,7 @@ class AddForeignBestAnswerIdToQuestionsTable extends Migration
     public function down()
     {
         Schema::table('questions', function (Blueprint $table) {
-            $table->dropForeign(['best_answer_id']);
+            $table->renameColumn('votes_count', 'votes');
         });
     }
 }
